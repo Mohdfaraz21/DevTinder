@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const  jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
+      index: true,
       minLength: 4,
       maxLength: 20,
     },
@@ -16,6 +17,7 @@ const userSchema = new mongoose.Schema(
     },
     emailId: {
       type: String,
+      lowercase: true,
       required: true,
       unique: true,
       trim: true,
@@ -66,6 +68,8 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+
+userSchema.index({ firstName: 1, lastName: 1 });
 // create mongoose schema {don't use arrow function}
 userSchema.methods.getJWT = async function () {
   const user = this;
